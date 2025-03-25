@@ -1,0 +1,19 @@
+version: '3'
+services:
+  vpp:
+    image: vpp-container:latest
+    container_name: vpp
+    privileged: true
+    network_mode: host
+    volumes:
+      - ./startup.conf:/etc/vpp/startup.conf
+      - ./init.vpp:/etc/vpp/init.vpp
+      - ./hdrcap_plugin.so:/usr/lib/x86_64-linux-gnu/vpp_plugins/hdrcap_plugin.so
+      - ./udp_echo_msg_plugin.so:/usr/lib/x86_64-linux-gnu/vpp_plugins/udp_echo_msg_plugin.so  
+      - /dev/hugepages:/dev/hugepages
+      - /sys/bus/pci/drivers:/sys/bus/pci/drivers
+    devices:
+      - "/dev/vfio/vfio:/dev/vfio/vfio"
+    environment:
+      - VPP_DPDK_DEVICES=0000:13:00.0  # 替换为实际网卡PCI地址
+    command: ["/usr/bin/vpp", "-c", "/etc/vpp/startup.conf"]

@@ -1,0 +1,4 @@
+set interface ip address eth0 10.240.167.1/16
+set interface state eth0 up
+
+ip route add 10.240.0.0/16 via eth0
